@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1013</width>
+    <height>675</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>图像处理工具</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QListView" name="listView">
+       <property name="minimumSize">
+        <size>
+         <width>327</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>原图</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>效果图</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1013</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>颜色空间变换</string>
+    </property>
+    <addaction name="action"/>
+    <addaction name="action_6"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>修改大小</string>
+    </property>
+    <addaction name="action_2"/>
+    <addaction name="action_3"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>滤波和去噪</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="action_4"/>
+    <addaction name="action_5"/>
+   </widget>
+   <addaction name="menu_4"/>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action">
+   <property name="text">
+    <string>灰度化</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>手动裁剪</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>设置比例</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>打开文件</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>打开文件夹</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>二值化</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
