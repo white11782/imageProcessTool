@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1013</width>
-    <height>675</height>
+    <width>1096</width>
+    <height>717</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,6 +27,12 @@
          <height>0</height>
         </size>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>327</width>
+         <height>16000000</height>
+        </size>
+       </property>
       </widget>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
@@ -36,29 +42,13 @@
         <attribute name="title">
          <string>原图</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <layout class="QGridLayout" name="gridLayout"/>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
          <string>效果图</string>
         </attribute>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <layout class="QGridLayout" name="gridLayout_2"/>
        </widget>
       </widget>
      </widget>
@@ -70,8 +60,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1013</width>
-     <height>28</height>
+     <width>1096</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -80,6 +70,7 @@
     </property>
     <addaction name="action"/>
     <addaction name="action_6"/>
+    <addaction name="actionfanzhuanyanse"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -99,11 +90,18 @@
     </property>
     <addaction name="action_4"/>
     <addaction name="action_5"/>
+    <addaction name="actionbaocun"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="title">
+     <string>绘图</string>
+    </property>
    </widget>
    <addaction name="menu_4"/>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
    <addaction name="menu_3"/>
+   <addaction name="menu_5"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action">
@@ -134,6 +132,16 @@
   <action name="action_6">
    <property name="text">
     <string>二值化</string>
+   </property>
+  </action>
+  <action name="actionbaocun">
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="actionfanzhuanyanse">
+   <property name="text">
+    <string>反转颜色</string>
    </property>
   </action>
  </widget>
