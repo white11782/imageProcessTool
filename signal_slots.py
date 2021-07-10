@@ -19,10 +19,12 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.label = MyLabel(self.tab)
         self.label.setText("")
         self.label.setObjectName("label")
+        self.label.setAlignment(Qt.AlignCenter)
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.label_2 = MyLabel(self.tab_2)
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
+        self.label_2.setAlignment(Qt.AlignCenter)
         self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
         #多线程
         self.threads = []
@@ -75,7 +77,17 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
 
     def clicked(self,qModelIndex):
         pix = QPixmap(self.ls[qModelIndex.row()])
-        self.label.setPixmap(pix.scaled(self.label.width(),self.label.height()))
+        #self.label.setPixmap(pix.scaled(self.label.width(),self.label.height()))
+        if pix.width()>self.label.width() and pix.height()>self.label.height():
+            self.label.setPixmap(pix.scaled(self.label.height()*pix.width()/pix.height()\
+                ,self.label.height()))
+        elif pix.width()<self.label.width() and pix.height()<self.label.height():
+            self.label.setPixmap(pix)
+        elif pix.width()>self.label.width() and pix.height()<self.label.height():
+            self.label.setPixmap(pix.scaled(self.label.width(),self.label.width()*pix.height/pix.width()))
+        elif pix.width()<self.label.width() and pix.height()>self.label.height():
+            self.label.setPixmap(pix.scaled(pix.width()*self.label.height()/pix.height(),\
+                pix.height()))
         self.processingImg = self.ls[qModelIndex.row()]
         img = cv2.imread(self.processingImg,cv2.IMREAD_ANYCOLOR)
         if img is None:
@@ -99,7 +111,17 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         else:
             imgGray = img
         pix_gray = QPixmap(self.mat2qimg(imgGray))
-        self.label_2.setPixmap(pix_gray.scaled(self.label_2.width(),self.label_2.height()))
+        #self.label_2.setPixmap(pix_gray.scaled(self.label_2.width(),self.label_2.height()))
+        if pix_gray.width()>self.label_2.width() and pix_gray.height()>self.label_2.height():
+            self.label_2.setPixmap(pix_gray.scaled(self.label_2.height()*pix_gray.width()/pix_gray.height()\
+                ,self.label_2.height()))
+        elif pix_gray.width()<self.label_2.width() and pix_gray.height()<self.label_2.height():
+            self.label_2.setPixmap(pix_gray)
+        elif pix_gray.width()>self.label_2.width() and pix_gray.height()<self.label_2.height():
+            self.label_2.setPixmap(pix_gray.scaled(self.label_2.width(),self.label_2.width()*pix_gray.height/pix_gray.width()))
+        elif pix_gray.width()<self.label_2.width() and pix_gray.height()>self.label.height():
+            self.label_2.setPixmap(pix_gray.scaled(pix_gray.width()*self.label_2.height()/pix_gray.height(),\
+                pix_gray.height()))
         self.savMat = imgGray
 
     def binary(self):
@@ -125,7 +147,17 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         _,thre = cv2.threshold(img,self.slider.value(),255,cv2.THRESH_BINARY)
         self.savMat = thre
         pix_thre = QPixmap(self.mat2qimg(thre))
-        self.label_2.setPixmap(pix_thre.scaled(self.label_2.width(),self.label_2.height()))
+        if pix_thre.width()>self.label_2.width() and pix_thre.height()>self.label_2.height():
+            self.label_2.setPixmap(pix_thre.scaled(self.label_2.height()*pix_thre.width()/pix_thre.height()\
+                ,self.label_2.height()))
+        elif pix_thre.width()<self.label_2.width() and pix_thre.height()<self.label_2.height():
+            self.label_2.setPixmap(pix_thre)
+        elif pix_thre.width()>self.label_2.width() and pix_thre.height()<self.label_2.height():
+            self.label_2.setPixmap(pix_thre.scaled(self.label_2.width(),self.label_2.width()*pix_thre.height/pix_thre.width()))
+        elif pix_thre.width()<self.label_2.width() and pix_thre.height()>self.label.height():
+            self.label_2.setPixmap(pix_thre.scaled(pix_thre.width()*self.label_2.height()/pix_thre.height(),\
+                pix_thre.height()))
+        #self.label_2.setPixmap(pix_thre.scaled(self.label_2.width(),self.label_2.height()))
     
     def mat2qimg(self,mat):
         img = QImage()
@@ -147,7 +179,17 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
                     self.savMat[i,j] = 0
         #self.progresReverse = QtWidgets.QProgressBar(self.statusBar)
         reverImg = QPixmap(self.mat2qimg(self.savMat))
-        self.label_2.setPixmap(reverImg.scaled(self.label_2.width(),self.label_2.height()))
+        #图片比例设置正确，加一个判断条件                                                                             
+        if reverImg.width()>self.label_2.width() and reverImg.height()>self.label_2.height():
+            self.label_2.setPixmap(reverImg.scaled(self.label_2.height()*reverImg.width()/reverImg.height()\
+                ,self.label_2.height()))
+        elif reverImg.width()<self.label_2.width() and reverImg.height()<self.label_2.height():
+            self.label_2.setPixmap(reverImg)
+        elif reverImg.width()>self.label_2.width() and reverImg.height()<self.label_2.height():
+            self.label_2.setPixmap(reverImg.scaled(self.label_2.width(),self.label_2.width()*reverImg.height/reverImg.width()))
+        elif reverImg.width()<self.label_2.width() and reverImg.height()>self.label.height():
+            self.label_2.setPixmap(reverImg.scaled(reverImg.width()*self.label_2.height()/reverImg.height(),\
+                reverImg.height()))
 
     def reverseThread(self):
         t = threading.Thread(target=self.reverse)
