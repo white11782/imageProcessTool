@@ -78,6 +78,7 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
     def clicked(self,qModelIndex):
         pix = QPixmap(self.ls[qModelIndex.row()])
         #self.label.setPixmap(pix.scaled(self.label.width(),self.label.height()))
+        #每次一点击label大小发生变化
         if pix.width()>self.label.width() and pix.height()>self.label.height():
             self.label.setPixmap(pix.scaled(self.label.height()*pix.width()/pix.height()\
                 ,self.label.height()))
