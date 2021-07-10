@@ -35,7 +35,7 @@ class MyLabel(QLabel):
         '''
         截图无法获取label上的照片
         '''
-        self.setPixmap(pix_cut.scaled(self.width(),self.height()))
+        #self.setPixmap(pix_cut.scaled(self.width(),self.height()))
         print(self.picture)
 
     def cancel(self):

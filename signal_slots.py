@@ -145,7 +145,7 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
                     self.savMat[i,j] = 255
                 else:
                     self.savMat[i,j] = 0
-        self.progresReverse = QtWidgets.QProgressBar(self.statusBar)
+        #self.progresReverse = QtWidgets.QProgressBar(self.statusBar)
         reverImg = QPixmap(self.mat2qimg(self.savMat))
         self.label_2.setPixmap(reverImg.scaled(self.label_2.width(),self.label_2.height()))
 
