@@ -19,7 +19,7 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.label = MyLabel(self.tab)
         self.label.setText("")
         self.label.setObjectName("label")
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setAlignment(Qt.AlignLeft)
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
         self.label_2 = MyLabel(self.tab_2)
         self.label_2.setText("")
@@ -80,15 +80,14 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         #self.label.setPixmap(pix.scaled(self.label.width(),self.label.height()))
         #每次一点击label大小发生变化
         if pix.width()>self.label.width() and pix.height()>self.label.height():
-            self.label.setPixmap(pix.scaled(self.label.height()*pix.width()/pix.height()\
+            self.label.setPixmap(pix.scaled(self.label.height()*(pix.width()/pix.height())\
                 ,self.label.height()))
         elif pix.width()<self.label.width() and pix.height()<self.label.height():
             self.label.setPixmap(pix)
         elif pix.width()>self.label.width() and pix.height()<self.label.height():
-            self.label.setPixmap(pix.scaled(self.label.width(),self.label.width()*pix.height/pix.width()))
+            self.label.setPixmap(pix.scaled(self.label.width(),self.label.width()*(pix.height()/pix.width())))
         elif pix.width()<self.label.width() and pix.height()>self.label.height():
-            self.label.setPixmap(pix.scaled(pix.width()*self.label.height()/pix.height(),\
-                pix.height()))
+            self.label.setPixmap(pix.scaled(pix.width()*self.label.height()/pix.height(),self.label.height()))
         self.processingImg = self.ls[qModelIndex.row()]
         img = cv2.imread(self.processingImg,cv2.IMREAD_ANYCOLOR)
         if img is None:

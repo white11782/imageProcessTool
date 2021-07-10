@@ -12,33 +12,45 @@ class MyLabel(QLabel):
     x1 = 0
     y1 = 0
     flag = False
+    hasScaled = False
 
     def mousePressEvent(self,event):
         if event.buttons() == Qt.LeftButton:
             self.flag = True
             self.x0 = event.x()
             self.y0 = event.y()
+        
+    def wheelEvent(self,event):
+        try:
+            pix = self.pixmap()
+            angle = event.angleDelta() /8
+            '''self.setPixmap(self.pixmap().scaled(pix.width()+angle.y(),\
+                    (pix.height()*(pix.width()+angle.y()))/ pix.width()))'''
+            self.setPixmap(self.pixmap().scaled(pix.width()+angle.y(),\
+                    pix.height()+angle.y())) 
+            self.hasScaled = True       
+        except:
+            pass
     
     def contextMenuEvent(self,ev):
         menu = QMenu(self)
         open_action=QAction("截图",menu)
-        open_action.triggered.connect(self.cutImg)
+        open_action.triggered.connect(self.__cutImg)
         menu.addAction(open_action)
         open_action=QAction("取消",menu)
-        open_action.triggered.connect(self.cancel)
+        open_action.triggered.connect(self.__cancel)
         menu.addAction(open_action)
         menu.exec_(ev.globalPos())
 
-    def cutImg(self):
-        pix = QPixmap()
-        pix_cut = pix.copy(self.rect)
-        '''
-        截图无法获取label上的照片
-        '''
-        #self.setPixmap(pix_cut.scaled(self.width(),self.height()))
-        print(self.picture)
+    def __cutImg(self):
+        pix = self.pixmap()
+        try:
+            pix_cut = pix.copy(self.rect)
+            self.setPixmap(pix_cut)
+        except:
+            QMessageBox.information(self,"提醒","未选中图片")
 
-    def cancel(self):
+    def __cancel(self):
         self.update()
         self.x0 = 0
         self.y0 = 0
