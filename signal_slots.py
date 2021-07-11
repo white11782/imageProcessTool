@@ -1,12 +1,12 @@
 from os import spawnve
 from PyQt5 import QtWidgets,QtCore
 from PyQt5 import QtGui
-from PyQt5.QtCore import QDir, QModelIndex, QStringListModel,Qt
+from PyQt5.QtCore import QDir, QEvent, QModelIndex, QStringListModel,Qt,QRect
 from cv2 import data
 from numpy.core.fromnumeric import shape
 from  Ui_main import Ui_MainWindow
-from PyQt5.QtWidgets import QAbstractItemView, QFileDialog,QMessageBox, QSlider
-from PyQt5.QtGui import QImage, QPalette,QBrush,QPixmap
+from PyQt5.QtWidgets import QAbstractItemView, QFileDialog, QLabel,QMessageBox, QSlider,QMenu,QAction
+from PyQt5.QtGui import QImage, QPalette,QBrush,QPixmap,QColor,QPen,QPainter
 import cv2
 import numpy as np
 import threading
@@ -24,7 +24,7 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.label_2 = MyLabel(self.tab_2)
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
-        self.label_2.setAlignment(Qt.AlignCenter)
+        self.label_2.setAlignment(Qt.AlignLeft)
         self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
         #多线程
         self.threads = []
@@ -45,7 +45,41 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.actionbaocun.triggered.connect(self.saveFile)
         self.actionfanzhuanyanse.triggered.connect(self.reverseThread)
         self.actionfanzhuanyanse.setEnabled(False)
-        self.action_2.triggered.connect(self.cutImg)
+        #self.action_2.triggered.connect(self.cutImg)
+
+        self.label.installEventFilter(self)
+        self.label_2.installEventFilter(self)
+    
+    #事件过滤器
+    def eventFilter(self,obj,event):
+        if obj == self.label:
+            if event.type() == QEvent.ContextMenu:
+                menu = QMenu(self.label)
+                cut_action=QAction("截图",menu)
+                cut_action.triggered.connect(self.label.cutImg)
+                menu.addAction(cut_action)
+                cancel_action=QAction("取消",menu)
+                cancel_action.triggered.connect(self.label.cancel)
+                menu.addAction(cancel_action)
+                menu.exec_(event.globalPos())
+                return True
+            else:
+                return False
+        if obj == self.label_2:
+            if event.type() == QEvent.ContextMenu:
+                menu = QMenu(self.label_2)
+                cut_action=QAction("截图",menu)
+                cut_action.triggered.connect(self.label_2.cutImg)
+                menu.addAction(cut_action)
+                cancel_action=QAction("取消",menu)
+                cancel_action.triggered.connect(self.label_2.cancel)
+                menu.addAction(cancel_action)
+                menu.exec_(event.globalPos())
+                return True
+            else:
+                return False
+        else:
+            return self.eventFilter(obj,event)
 
     def openImg(self):
         file,ok = QtWidgets.QFileDialog.getOpenFileName(self,"打开","./","All Files(*)")
@@ -197,5 +231,23 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         #t.daemon = True 设置守护线程：退出主程序该线程也退出，False主程序退出该线程不退出
         t.start()
 
-    def cutImg(self): 
-        pass
+
+from signal_slots import MyWindow
+import  sys
+from PyQt5.QtWidgets import QApplication
+import os
+import sys
+
+import PyQt5
+
+dirname = os.path.dirname(PyQt5.__file__)
+plugin_path = os.path.join(dirname,'Qt', 'plugins', 'platforms')
+os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = plugin_path
+
+
+
+if __name__ == '__main__':
+    myapp = QApplication(sys.argv)
+    window = MyWindow()
+    window.show()
+    sys.exit(myapp.exec_()) 

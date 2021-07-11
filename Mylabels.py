@@ -35,14 +35,14 @@ class MyLabel(QLabel):
     def contextMenuEvent(self,ev):
         menu = QMenu(self)
         open_action=QAction("截图",menu)
-        open_action.triggered.connect(self.__cutImg)
+        open_action.triggered.connect(self.cutImg)
         menu.addAction(open_action)
         open_action=QAction("取消",menu)
-        open_action.triggered.connect(self.__cancel)
+        open_action.triggered.connect(self.cancel)
         menu.addAction(open_action)
         menu.exec_(ev.globalPos())
 
-    def __cutImg(self):
+    def cutImg(self):
         pix = self.pixmap()
         try:
             pix_cut = pix.copy(self.rect)
@@ -50,7 +50,7 @@ class MyLabel(QLabel):
         except:
             QMessageBox.information(self,"提醒","未选中图片")
 
-    def __cancel(self):
+    def cancel(self):
         self.update()
         self.x0 = 0
         self.y0 = 0
@@ -75,20 +75,23 @@ class MyLabel(QLabel):
             painter.setPen(QPen(blue))
             painter.drawRect(self.rect)
         elif self.x0>self.x1 and self.y1>self.y0:
-            rect = QRect(self.x1,self.y0,abs(self.x0-self.x1),abs(self.y1-self.y0))
+            self.rect = QRect(self.x1,self.y0,abs(self.x0-self.x1),abs(self.y1-self.y0))
             painter = QPainter(self)
             blue = QColor(0,0,255)
             painter.setPen(QPen(blue))
-            painter.drawRect(rect)
+            painter.drawRect(self.rect)
         elif self.x1>self.x0 and self.y0>self.y1:
-            rect = QRect(self.x0,self.y1,abs(self.x1-self.x0),abs(self.y0-self.y1))
+            self.rect = QRect(self.x0,self.y1,abs(self.x1-self.x0),abs(self.y0-self.y1))
             painter = QPainter(self)
             blue = QColor(0,0,255)
             painter.setPen(QPen(blue))
-            painter.drawRect(rect)  
+            painter.drawRect(self.rect)  
         elif self.x0>self.x1 and self.y0>self.y1:
-            rect = QRect(self.x1,self.y1,abs(self.x0-self.x1),abs(self.y0-self.y1))
+            self.rect = QRect(self.x1,self.y1,abs(self.x0-self.x1),abs(self.y0-self.y1))
             painter = QPainter(self)
             blue = QColor(0,0,255)
             painter.setPen(QPen(blue))
-            painter.drawRect(rect)   
+            painter.drawRect(self.rect)   
+
+    def getRect(self):
+        return self.rect
