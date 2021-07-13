@@ -16,6 +16,8 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self):
         super(MyWindow,self).__init__()
         self.setupUi(self)
+        self.flag = False
+
         self.label = MyLabel(self.tab)
         self.label.setText("")
         self.label.setObjectName("label")
@@ -26,6 +28,10 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.label_2.setObjectName("label_2")
         self.label_2.setAlignment(Qt.AlignLeft)
         self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
+        self.slider = QtWidgets.QSlider(self.label_2)
+        self.slider.setOrientation(QtCore.Qt.Horizontal)
+        self.slider.setEnabled(False)
+        self.slider.setVisible(False)
         #多线程
         self.threads = []
         self.action_4.triggered.connect(self.openImg)
@@ -36,10 +42,7 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.action_6.triggered.connect(self.binary)
         self.action_5.triggered.connect(self.openFiles)
         self.listView.clicked.connect(self.clicked)  
-        self.slider = QtWidgets.QSlider(self.label_2)
-        self.slider.setOrientation(QtCore.Qt.Horizontal)
-        self.slider.setEnabled(False)
-        self.slider.setVisible(False)
+        
         #self.spinBox = QtWidgets.QAbstractSpinBox(self.tab_2)
         #self.spinBox.setVisible(False)
         self.actionbaocun.triggered.connect(self.saveFile)
@@ -47,8 +50,10 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.actionfanzhuanyanse.setEnabled(False)
         #self.action_2.triggered.connect(self.cutImg)
 
+        #注册事件过滤器，不要忘记，没有这个过滤器不起作用
         self.label.installEventFilter(self)
         self.label_2.installEventFilter(self)
+        self.listView.installEventFilter(self)
     
     #事件过滤器
     def eventFilter(self,obj,event):
@@ -78,6 +83,19 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
                 return True
             else:
                 return False
+        if obj == self.listView:
+            if event.type() == QEvent.ContextMenu:
+                menu = QMenu(self.listView)
+                dele_action = QAction("删除",menu)
+                dele_action.triggered.connect(self.deleListItem)
+                menu.addAction(dele_action)
+                clear_action = QAction("清空",menu)
+                clear_action.triggered.connect(self.clearListItem)
+                menu.addAction(clear_action)
+                menu.exec_(event.globalPos())
+                return True
+            else:
+                return False
         else:
             return self.eventFilter(obj,event)
 
@@ -94,22 +112,30 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         dir = QDir(mFolderPath)
         #dir.setNameFilters("All Files(*)")
         mImgNames = dir.entryList()
+        ls_tmp = []
         for i in range(len(mImgNames)):
             if mImgNames[i] not in self.ls:
                 self.ls.append(mFolderPath+"/"+mImgNames[i])
+        '''
+        判断是否有重复元素
+        '''
+        
+
+    
         slm = QStringListModel()
         slm.setStringList(self.ls)
         self.listView.setModel(slm)
-        '''for i in range(len(mImgNames)):
-            if mImgNames[i] not in self.ls:
-                self.ls.pop()'''
     
     def saveFile(self):
         filePath,ok = QFileDialog.getSaveFileName(self,"save","./","bmp(*.bmp);;png(*.png);;all files(*.*)")
-        if filePath is not None and ok:
-            cv2.imwrite(filePath,self.savMat)
-
+        try:
+            if filePath is not None and ok:
+                cv2.imwrite(filePath,self.savMat)
+        except:
+            QMessageBox.warning(self,"错误","保存失败")
     def clicked(self,qModelIndex):
+        self.selectedItem = self.ls[qModelIndex.row()]
+        self.selectedRow = qModelIndex.row()
         pix = QPixmap(self.ls[qModelIndex.row()])
         #self.label.setPixmap(pix.scaled(self.label.width(),self.label.height()))
         #每次一点击label大小发生变化
@@ -230,6 +256,36 @@ class  MyWindow(QtWidgets.QMainWindow,Ui_MainWindow):
         self.threads.append(t)
         #t.daemon = True 设置守护线程：退出主程序该线程也退出，False主程序退出该线程不退出
         t.start()
+    
+    def deleListItem(self):
+        i = 0
+        self.flag = False
+        '''
+        删除顺序不对
+        '''
+        while len(self.ls)>0 and i<len(self.ls):
+            if self.flag == True:
+                break
+            if self.selectedItem == self.ls[i] and i == len(self.ls)-1:
+                self.ls.pop()
+                break
+            if self.selectedItem == self.ls[i]:
+                for j in range(len(self.ls)-i-1,len(self.ls)-1):
+                    self.ls[j] = self.ls[j+1]
+                    if j == len(self.ls)-2:
+                        self.ls.pop()
+                        self.flag = True     
+            i += 1  
+        slm = QStringListModel()
+        slm.setStringList(self.ls)
+        self.listView.setModel(slm)
+    
+    def clearListItem(self):
+        while len(self.ls)>0:
+            self.ls.pop()   
+        slm = QStringListModel()
+        slm.setStringList(self.ls)
+        self.listView.setModel(slm)
 
 
 from signal_slots import MyWindow

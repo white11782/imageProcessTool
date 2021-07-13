@@ -24,24 +24,12 @@ class MyLabel(QLabel):
         try:
             pix = self.pixmap()
             angle = event.angleDelta() /8
-            '''self.setPixmap(self.pixmap().scaled(pix.width()+angle.y(),\
-                    (pix.height()*(pix.width()+angle.y()))/ pix.width()))'''
             self.setPixmap(self.pixmap().scaled(pix.width()+angle.y(),\
                     pix.height()+angle.y())) 
             self.hasScaled = True       
         except:
             pass
     
-    def contextMenuEvent(self,ev):
-        menu = QMenu(self)
-        open_action=QAction("截图",menu)
-        open_action.triggered.connect(self.cutImg)
-        menu.addAction(open_action)
-        open_action=QAction("取消",menu)
-        open_action.triggered.connect(self.cancel)
-        menu.addAction(open_action)
-        menu.exec_(ev.globalPos())
-
     def cutImg(self):
         pix = self.pixmap()
         try:
@@ -51,11 +39,13 @@ class MyLabel(QLabel):
             QMessageBox.information(self,"提醒","未选中图片")
 
     def cancel(self):
-        self.update()
         self.x0 = 0
         self.y0 = 0
         self.x1 = 0
         self.y1 = 0
+        self.rect = QRect(0, 0,0,0)
+        self.update()
+        
     def mouseReleaseEvent(self,event):
         self.flag = False
     
